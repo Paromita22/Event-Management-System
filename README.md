@@ -5,7 +5,7 @@ Event Management System is a web-based platform where organizers can create even
 *******Contributions are added in the end of Report_A06.pdf(1) file*******
 <br>
 <br>
-********Team members:*****
+*****Team members:*****
 <br>Paromita Chanda
 <br>Nusrat Jahan
 <br>Ayesha Begum
