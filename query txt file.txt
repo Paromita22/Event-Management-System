@@ -1,0 +1,245 @@
+CREATE TABLE Customer (
+    cust_id varchar(20)PRIMARY KEY ,
+    cust_name VARCHAR(100),
+    cust_phn VARCHAR(15),
+    cust_email VARCHAR(100) UNIQUE
+);
+
+
+CREATE TABLE Eventt (
+    evnt_id varchar(20) PRIMARY KEY ,
+    evnt_type VARCHAR(100),
+    evnt_budget numeric(10, 2),
+    evnt_date DATE
+);
+
+
+CREATE TABLE Organizer (
+    org_id varchar(20) PRIMARY KEY ,
+    org_name VARCHAR(100),
+    org_mail VARCHAR(100) UNIQUE,
+    org_phn VARCHAR(15),
+    org_provided_services varchar(500)
+);
+
+
+CREATE TABLE Venue (
+    ven_id varchar(20) PRIMARY KEY,
+    ven_address VARCHAR(255),
+    ven_capacity numeric
+);
+
+CREATE TABLE Feedback (
+    fed_id varchar(20) PRIMARY KEY ,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    review varchar(500)
+   
+);
+
+CREATE TABLE Booking (
+    booking_id varchar(20) PRIMARY KEY ,
+    cust_id varchar(20),
+    evnt_id varchar(20),
+    booking_date DATE,
+    FOREIGN KEY (cust_id) REFERENCES Customer(cust_id),
+    FOREIGN KEY (evnt_id) REFERENCES Eventt(evnt_id)
+);
+
+
+CREATE TABLE Organises (
+    org_event_id varchar(20) PRIMARY KEY ,
+    org_id varchar(20),
+    evnt_id varchar(20),
+    FOREIGN KEY (org_id) REFERENCES Organizer(org_id),
+    FOREIGN KEY (evnt_id) REFERENCES Eventt(evnt_id)
+);
+
+CREATE TABLE Availability (
+    avail_id varchar(20) PRIMARY KEY,
+    evnt_id varchar(20),
+    ven_id varchar(20),
+    ven_status VARCHAR(50),
+    avail_date DATE,
+    start_time TIME,
+    end_time TIME,
+    FOREIGN KEY (evnt_id) REFERENCES Eventt(evnt_id),
+    FOREIGN KEY (ven_id) REFERENCES Venue(ven_id)
+);
+
+CREATE TABLE OrganizerFeedback (
+    org_feedback_id varchar(20) PRIMARY KEY ,
+    org_id varchar(20),
+    cust_id varchar(20),
+    fed_id varchar(20),
+    FOREIGN KEY (org_id) REFERENCES Organizer(org_id),
+    FOREIGN KEY (cust_id) REFERENCES Customer(cust_id),
+    FOREIGN KEY (fed_id) REFERENCES Feedback(fed_id)
+);
+
+CREATE TABLE CustomerFeedback (
+    cust_feedback_id varchar(20) PRIMARY KEY ,
+    cust_id varchar(20),
+    org_id varchar(20),
+    fed_id varchar(20),
+    FOREIGN KEY (cust_id) REFERENCES Customer(cust_id),
+    FOREIGN KEY (org_id) REFERENCES Organizer(org_id),
+    FOREIGN KEY (fed_id) REFERENCES Feedback(fed_id)
+);
+
+
+
+INSERT INTO Customer (cust_id, cust_name, cust_phn, cust_email) VALUES 
+('c1', 'Alice Johnson','01723587430','alice@example.com'),
+('c2', 'Bob Smith', '01723587453', 'bob@example.com'),
+('c3', 'Carol White','01923587435', 'carol@example.com'),
+('c4', 'David Brown','01323587439', 'david@example.com'),
+('c5', 'Eve Davis', '01723587438', 'eve@example.com');
+
+
+INSERT INTO Organizer (org_id, org_name, org_mail, org_phn, org_provided_services) VALUES 
+('o1', 'Tech Events Inc.', 'tech@example.com', '01345678901', 'Event planning, Catering'),
+('o2', 'Music Mania', 'music@example.com', '01745678931', 'Stage setup, Sound management'),
+('o3', 'Art World', 'art@example.com', '01774567890', 'Exhibition management, Advertising'),
+('o4', 'Foodies United', 'food@example.com', '01345678957', 'Catering, Venue arrangement'),
+('o5', 'Business Experts', 'business@example.com', '01745678951', 'Corporate event planning, Sponsorship');
+
+
+
+INSERT INTO Eventt (evnt_id, evnt_type, evnt_budget, evnt_date) VALUES 
+('e1', 'Tech Conference', 50000.00, '2025-02-15'),
+('e2', 'Music Festival', 25000.00, '2025-01-20'),
+('e3', 'Art Exhibition', 10000.00, '2025-02-05'),
+('e4', 'Food Fair', 12000.00, '2025-01-10'),
+('e5', 'Business Summit', 20000.00, '2025-02-25');
+
+
+
+INSERT INTO Venue (ven_id, ven_address, ven_capacity) VALUES
+('v1', '123 Main St', 500),
+('v2', '456 Elm St', 200),
+('v3', '789 Oak St', 300),
+('v4', '101 Pine St', 150),
+('v5', '202 Maple St', 400);
+
+
+
+INSERT INTO Booking (booking_id, cust_id, evnt_id, booking_date) VALUES 
+('b1','c1', 'e1', '2024-09-01'),
+('b2','c2', 'e2', '2024-09-02'),
+('b3','c3', 'e3', '2024-09-03'),
+('b4','c4', 'e4', '2024-09-04'),
+('b5','c5', 'e5', '2024-09-05');
+
+
+
+
+INSERT INTO Availability (avail_id, evnt_id, ven_id, ven_status, avail_date, start_time, end_time) VALUES
+('a1', 'e1', 'v1', 'Available', '2025-02-15', '09:00:00', '17:00:00'),
+('a2', 'e2', 'v4', 'Available', '2025-01-20', '10:00:00', '22:00:00'),
+('a3', 'e3', 'v3', 'Available', '2025-02-05', '08:00:00', '20:00:00'),
+('a4', 'e4', 'v4', 'Available', '2025-01-10', '11:00:00', '23:00:00'),
+('a5', 'e5', 'v5', 'Booked', '2025-02-25', '07:00:00', '19:00:00');
+
+INSERT INTO Organises (org_event_id , org_id, evnt_id) VALUES 
+('oe1','o1', 'e1'),
+('oe2','o2', 'e2'),
+('oe3','o3', 'e3'),
+('oe4','o4', 'e4'),
+('oe5','o5', 'e5');
+
+INSERT INTO Feedback (fed_id, rating, review) VALUES 
+('f1', 5, 'Good behaviour'),
+('f2', 4, 'Need better sound system'),
+('f3', 5, 'Amazing execution!'),
+('f4', 3, 'Improve the catering service'),
+('f5', 2, 'Too late payment');
+
+INSERT INTO OrganizerFeedback (org_feedback_id, org_id, cust_id, fed_id) VALUES 
+('of1', 'o1', 'c1','f1'),
+('of2', 'o3', 'c3','f5');
+INSERT INTO CustomerFeedback (cust_feedback_id, cust_id, org_id, fed_id) VALUES 
+('cf1', 'c2', 'o2','f2'),
+('cf2', 'c4', 'o4','f3'),
+('cf3', 'c1', 'o1','f4');
+
+
+
+
+
+ALTER TABLE Booking
+ADD COLUMN evnt_date DATE;
+
+ALTER TABLE Booking
+ADD COLUMN evnt_start_time TIME;
+
+ALTER TABLE Booking
+ADD COLUMN evnt_end_time TIME;
+
+
+
+ALTER TABLE Eventt
+DROP COLUMN evnt_date;
+
+DELETE FROM Booking;
+
+INSERT INTO Booking (booking_id, cust_id, evnt_id, booking_date, evnt_date, evnt_start_time, evnt_end_time) VALUES
+('b1','c5','e5', '2024-09-05','2025-02-25', '07:00:00', '19:00:00');
+
+
+UPDATE Availability
+SET avail_date = NULL
+WHERE ven_status = 'Available';
+
+
+alter table venue
+add ven_name varchar(50);
+
+UPDATE venue
+SET ven_name = 'Grandview Hall'
+WHERE ven_id = 'v1';
+
+UPDATE venue 
+SET ven_name = 'Elmwood Event Center' 
+WHERE ven_id = 'v2';
+
+UPDATE venue 
+SET ven_name = 'Oakview Pavilion' 
+WHERE ven_id = 'v3';
+
+UPDATE venue 
+SET ven_name = 'Pinecrest Venue' 
+WHERE ven_id = 'v4';
+
+UPDATE venue 
+SET ven_name = 'Maple Grove Banquet Hall'
+WHERE ven_id = 'v5';
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+UPDATE Availability
+SET ven_status = 'Available'
+WHERE avail_id = 'a1' AND ven_status = 'Booked';
+
+UPDATE Availability
+SET avail_date =NULL
+WHERE avail_id = 'a1';
+
+UPDATE Availability
+SET ven_status = 'Available'
+WHERE avail_id = 'a5' AND ven_status = 'Booked';
+
+UPDATE Availability
+SET avail_date =NULL
+WHERE avail_id = 'a5';
+
+INSERT INTO Availability (avail_id, evnt_id, ven_id, ven_status, avail_date, start_time, end_time) VALUES
+
+('a6', 'e5', 'v5', 'Booked', '2025-02-25', '07:00:00', '19:00:00');
+
+
+delete from booking;
+INSERT INTO Booking (booking_id, cust_id, evnt_id, booking_date, evnt_date, evnt_start_time, evnt_end_time) VALUES
+('b1','c5','e5', '2024-09-05','2025-01-25', '07:00:00', '19:00:00');
+INSERT INTO Booking (booking_id, cust_id, evnt_id, booking_date, evnt_date, evnt_start_time, evnt_end_time) VALUES
+('b8','c713','e366', '2024-09-05','2025-01-25', '07:00:00', '19:00:00');
