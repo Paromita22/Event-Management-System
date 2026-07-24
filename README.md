@@ -9,5 +9,5 @@ Event Management System is a web-based platform where organizers can create even
 <br>Paromita Chanda
 <br>Nusrat Jahan
 <br>Ayesha Begum
-<br>Ishfar Binte Haque
+<br>Ishfar Bintey Haque
 <br>Labiba Alam
